@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { TodoContext } from '../../context/todoContext';
+import { StateContext } from '../../context/stateContext';
 
 export const TodoList: React.FC = () => {
-  const { todos } = useContext(TodoContext);
+  const { state } = useContext(StateContext); // 👈 certo agora!
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -20,7 +20,7 @@ export const TodoList: React.FC = () => {
       </thead>
 
       <tbody>
-        {todos.map(todo => (
+        {state.todos.map(todo => (
           <tr data-cy="todo" className="" key={todo.id}>
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">

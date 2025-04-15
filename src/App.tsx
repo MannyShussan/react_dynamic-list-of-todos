@@ -5,6 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
+import { StateProvider } from './context/stateContext';
 import { TodoProvider } from './context/todoContext';
 // import { TodoModal } from './components/TodoModal';
 // import { Loader } from './components/Loader';
@@ -12,24 +13,26 @@ import { TodoProvider } from './context/todoContext';
 export const App: React.FC = () => {
   return (
     <TodoProvider>
-      <div className="section">
-        <div className="container">
-          <div className="box">
-            <h1 className="title">Todos:</h1>
+      <StateProvider>
+        <div className="section">
+          <div className="container">
+            <div className="box">
+              <h1 className="title">Todos:</h1>
 
-            <div className="block">
-              <TodoFilter />
-            </div>
+              <div className="block">
+                <TodoFilter />
+              </div>
 
-            <div className="block">
-              {/* <Loader /> */}
-              <TodoList />
+              <div className="block">
+                {/* <Loader /> */}
+                <TodoList />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* <TodoModal /> */}
+        {/* <TodoModal /> */}
+      </StateProvider>
     </TodoProvider>
   );
 };

@@ -1,25 +1,35 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { TodoContext } from '../../context/todoContext';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
+import { StateContext } from '../../context/stateContext';
+import { TodoFilterStatus } from '../../types/StoreState';
 
 export const TodoFilter = () => {
-  const { setTodos, allTodos } = useContext(TodoContext);
-  const [filter, setFilter] = useState<string>('');
-  const handlerInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter(event.target.value);
-  };
+  const { dispatch } = useContext(StateContext);
+  const [search, setSearch] = useState<string>('');
+  const [status, setStatus] = useState<TodoFilterStatus>(TodoFilterStatus.All);
 
   useEffect(() => {
-    setTodos(allTodos.filter(todo => todo.title.includes(filter.trim())));
-  }, [filter]);
+    dispatch({
+      type: 'search',
+      payload: {
+        search,
+        status,
+      },
+    });
+  }, [search, status]);
 
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect">
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+          <select
+            data-cy="statusSelect"
+            onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+              setStatus(event.target.value as TodoFilterStatus)
+            }
+          >
+            <option value={TodoFilterStatus.All}>All</option>
+            <option value={TodoFilterStatus.Active}>Active</option>
+            <option value={TodoFilterStatus.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -30,7 +40,9 @@ export const TodoFilter = () => {
           type="text"
           className="input"
           placeholder="Search..."
-          onInput={handlerInput}
+          onInput={(event: ChangeEvent<HTMLInputElement>) =>
+            setSearch(event.target.value)
+          }
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
