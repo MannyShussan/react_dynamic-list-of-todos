@@ -3,11 +3,11 @@ import { Filter, StoreState } from '../types/StoreState';
 import { Todo } from '../types/Todo';
 
 function applyFilters(state: StoreState): Todo[] {
+  const searchTerm = state.filter.search.trim().toLowerCase();
+
   return state.allTodos
     .filter(todo => {
-      return todo.title
-        .toLocaleUpperCase()
-        .includes(state.filter.search.trim().toLocaleUpperCase());
+      return todo.title.toLowerCase().includes(searchTerm);
     })
     .filter(todo => {
       if (state.filter.status === 'active') {
@@ -25,19 +25,32 @@ function applyFilters(state: StoreState): Todo[] {
 export function reducer(state: StoreState, action: Filter): StoreState {
   switch (action.type) {
     case 'search':
+      const newFilter = {
+        ...state.filter,
+        ...action.payload,
+      };
+
+      const filteredTodos = applyFilters({
+        ...state,
+        filter: newFilter,
+      });
+
       return {
         ...state,
-        filter: {
-          ...state.filter,
-          ...action.payload,
-        },
-        todos: applyFilters({
-          ...state,
-          filter: {
-            ...state.filter,
-            ...action.payload,
-          },
-        }),
+        filter: newFilter,
+        todos: filteredTodos,
+      };
+
+    case 'load':
+      return {
+        ...state,
+        inLoadTodo: action.payload,
+      };
+
+    case 'modal':
+      return {
+        ...state,
+        inLoadModal: action.payload,
       };
 
     case 'init':

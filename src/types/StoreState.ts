@@ -10,6 +10,11 @@ export interface StoreState {
   todos: Todo[];
   allTodos: Todo[];
   filter: SearchState;
+  inLoadTodo: boolean;
+  inLoadModal: {
+    opened: boolean;
+    todo?: Todo | null;
+  };
 }
 
 export interface SearchState {
@@ -22,9 +27,26 @@ export interface SearchFilter {
   payload: SearchState;
 }
 
+export interface InLoadTodoState {
+  type: 'load';
+  payload: boolean;
+}
+
 export interface InitFilter {
   type: 'init';
   payload: Todo[];
 }
 
-export type Filter = SearchFilter | InitFilter;
+export interface InLoadModalState {
+  type: 'modal';
+  payload: {
+    opened: boolean;
+    todo?: Todo | null;
+  };
+}
+
+export type Filter =
+  | SearchFilter
+  | InitFilter
+  | InLoadTodoState
+  | InLoadModalState;

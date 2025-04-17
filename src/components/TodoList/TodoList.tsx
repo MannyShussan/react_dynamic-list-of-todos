@@ -1,10 +1,21 @@
-import React, { useContext } from 'react';
+/* eslint-disable @typescript-eslint/indent */
+import React, { useContext, useEffect, useState } from 'react';
 import { StateContext } from '../../context/stateContext';
+import { Loader } from '../Loader';
 
 export const TodoList: React.FC = () => {
-  const { state } = useContext(StateContext); // 👈 certo agora!
+  const { state, dispatch } = useContext(StateContext);
+  const [loaded, setLoaded] = useState<boolean>(true);
 
-  return (
+  useEffect(() => {
+    if (state.allTodos.length > 0) {
+      setLoaded(false);
+    }
+  }, [state.allTodos]);
+
+  return loaded ? (
+    <Loader />
+  ) : (
     <table className="table is-narrow is-fullwidth">
       <thead>
         <tr>
@@ -38,9 +49,21 @@ export const TodoList: React.FC = () => {
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              <button data-cy="selectButton" className="button" type="button">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => {
+                  dispatch({ type: 'modal', payload: { opened: true, todo } });
+                }}
+              >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  {state.inLoadModal.opened &&
+                  state.inLoadModal.todo?.id === todo.id ? (
+                    <i className="far fa-eye-slash" />
+                  ) : (
+                    <i className="far fa-eye" />
+                  )}
                 </span>
               </button>
             </td>

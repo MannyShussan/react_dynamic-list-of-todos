@@ -7,6 +7,11 @@ export const TodoFilter = () => {
   const [search, setSearch] = useState<string>('');
   const [status, setStatus] = useState<TodoFilterStatus>(TodoFilterStatus.All);
 
+  const handleClear = () => {
+    setSearch('');
+    setStatus(TodoFilterStatus.All);
+  };
+
   useEffect(() => {
     dispatch({
       type: 'search',
@@ -15,7 +20,7 @@ export const TodoFilter = () => {
         status,
       },
     });
-  }, [search, status]);
+  }, [search, status, dispatch]);
 
   return (
     <form className="field has-addons">
@@ -26,6 +31,7 @@ export const TodoFilter = () => {
             onChange={(event: ChangeEvent<HTMLSelectElement>) =>
               setStatus(event.target.value as TodoFilterStatus)
             }
+            value={status}
           >
             <option value={TodoFilterStatus.All}>All</option>
             <option value={TodoFilterStatus.Active}>Active</option>
@@ -40,9 +46,10 @@ export const TodoFilter = () => {
           type="text"
           className="input"
           placeholder="Search..."
-          onInput={(event: ChangeEvent<HTMLInputElement>) =>
+          onChange={(event: ChangeEvent<HTMLInputElement>) =>
             setSearch(event.target.value)
           }
+          value={search}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -50,11 +57,14 @@ export const TodoFilter = () => {
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
+          {search !== '' && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={handleClear}
+            />
+          )}
         </span>
       </p>
     </form>

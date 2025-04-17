@@ -6,9 +6,8 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { StateProvider } from './context/stateContext';
+import { TodoModal } from './components/TodoModal';
 import { TodoProvider } from './context/todoContext';
-// import { TodoModal } from './components/TodoModal';
-// import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   return (
@@ -24,14 +23,13 @@ export const App: React.FC = () => {
               </div>
 
               <div className="block">
-                {/* <Loader /> */}
                 <TodoList />
               </div>
             </div>
           </div>
         </div>
 
-        {/* <TodoModal /> */}
+        <TodoModal />
       </StateProvider>
     </TodoProvider>
   );

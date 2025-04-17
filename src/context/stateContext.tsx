@@ -16,6 +16,8 @@ type Props = {
 const initialState: StoreState = {
   allTodos: [],
   todos: [],
+  inLoadTodo: true,
+  inLoadModal: { opened: false },
   filter: {
     search: '',
     status: TodoFilterStatus.All,
@@ -29,15 +31,12 @@ export const StateContext = React.createContext<StoreContextType>({
 
 export const StateProvider: React.FC<Props> = ({ children }) => {
   const { todos } = useContext(TodoContext);
-  const [state, dispatch] = useReducer(reducer, {
-    ...initialState,
-    allTodos: todos,
-    todos,
-  });
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     if (todos.length > 0) {
       dispatch({ type: 'init', payload: todos });
+      dispatch({ type: 'load', payload: false });
     }
   }, [todos]);
 
